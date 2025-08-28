@@ -1,56 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"> 
-  <title>iPhone App Homepage</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G.MO - App Homepage</title>
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
+    <!-- Custom CSS Styles -->
+    <style>
+        /* Global CSS Reset & Box Sizing */
+        * {
+            box-sizing: border-box;
+        }
 
-    body {
-      margin: 0;
-      background-color: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
-    }
+        /* Body and Overall Page Layout */
+        body {
+            margin: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+            font-family: 'Segoe UI', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-    .app-container {
-      width: 90vw;
-      max-width: 430px;
-      height: 90vh;
-      max-height: 932px;
-      background-color: #ffffff;
-      border-radius: 30px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+        /* Main App Container, mimicking a phone screen */
+        .app-container {
+            width: 90vw;
+            max-width: 430px;
+            height: 90vh;
+            max-height: 932px;
+            background-color: #ffffff;
+            border-radius: 3rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
-    h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
-      color: #333;
-    }
+        /* Hides scrollbars for a clean app-like feel */
+        .scroll-container {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;    /* Firefox */
+        }
 
-    p {
-      font-size: 1.2em;
-      color: #666;
-    }
-  </style>
+        .scroll-container::-webkit-scrollbar {
+            display: none; /* WebKit browsers (Chrome, Safari) */
+        }
+        
+        /* Typography styles */
+        h1, h2, h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5rem; }
+        h3 { font-size: 1.25rem; }
+
+        p {
+            margin: 0;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Specific Component Styles */
+        .header {
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+
+        .header .logo-svg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .header .icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem;
+            color: #9ca3af;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 1rem 1.5rem 5rem 1.5rem;
+            overflow-y: auto;
+        }
+
+        .greeting {
+            margin-bottom: 1.5rem;
+        }
+
+        .weather-card {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: #22c55e;
+            color: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .weather-card .location-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .weather-card .current-temp {
+            font-size: 4rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .weather-card .details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        
+        .insights-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .insight-card {
+            background-color: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+        
+        .insight-card table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        
+        .insight-card th, .insight-card td {
+            padding: 0.5rem;
+        }
+
+        .insight-card thead th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+        }
+
+        .insight-card tbody tr {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .insight-card tbody tr:nth-child(2n) {
+            background-color: #fefce8;
+        }
+        
+        .insight-card tbody tr:nth-child(3n) {
+            background-color: #fef2f2;
+        }
+        
+        .insight-card .risk-level.optimal { color: #22c55e; font-weight: 500; }
+        .insight-card .risk-level.warning { color: #eab308; font-weight: 500; }
+        .insight-card .risk-level.stress { color: #ef4444; font-weight: 500; }
+
+        .advice-box {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 2px dashed #d1d5db;
+        }
+
+        .advice-box .title-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #22c55e;
+            font-weight: 700;
+        }
+
+        .bottom-nav {
+            padding: 1rem 1.5rem;
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bottom-nav .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .bottom-nav .nav-item:hover {
+            color: #22c55e;
+        }
+
+        .bottom-nav .nav-item.active {
+            color: #22c55e;
+        }
+    </style>
 </head>
 <body>
-  <div class="app-container">
-    <h1>Home page</h1>
-    <p>This ut mimics an iPhone screen</p>
-    <p>Responsive to your browser size</p>
-  </div>
+
+    <!-- Main App Container: Simulates a mobile phone screen -->
+    <div class="app-container">
+        
+        <!-- Header Section: Contains the logo, app name, and navigation icons -->
+        <header class="header">
+            <div class="logo">
+                <!-- G.MO Logo SVG -->
+                <svg class="logo-svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8zm-1-14c-1.38 0-2.5 1.12-2.5 2.5 0 .55.45 1 1 1s1-.45 1-1c0-.265.11-.518.293-.707.184-.184.437-.293.707-.293.552 0 1 .448 1 1v1.5c0 .552-.448 1-1 1s-1-.448-1-1v-1c-2.485 0-4.5 2.015-4.5 4.5s2.015 4.5 4.5 4.5c.552 0 1-.448 1-1s-.448-1-1-1c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5c.552 0 1-.448 1-1v-1.5c0-.552.448-1 1-1s1 .448 1 1v1.5c0 .552-.448 1-1 1s-1 .448-1 1v1.5c0 .552.448 1 1 1s1-.448 1-1v-1c2.485 0 4.5-2.015 4.5-4.5s-2.015-4.5-4.5-4.5c-.552 0-1 .448-1 1s.448 1 1 1z"/>
+                </svg>
+                <span>G.MO</span>
+            </div>
+            <div class="icons">
+                <i class="fa-solid fa-bell"></i>
+                <i class="fa-regular fa-user"></i>
+            </div>
+        </header>
+
+        <!-- Main Content Area: Scrollable section for all dashboard content -->
+        <main class="main-content scroll-container">
+            <!-- Greeting Section -->
+            <section class="greeting">
+                <h1>Howdy, Bill! <span class="text-xl">👋</span></h1>
+            </section>
+
+            <!-- Weather Dashboard Card: Displays key weather information -->
+            <section class="weather-card">
+                <div class="location-info">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 1.125rem; font-weight: 600;">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Petersburg</span>
+                    </div>
+                    <span style="font-size: 0.875rem; font-weight: 300;">Aug 23, Tue</span>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                    <div class="current-temp">
+                        <span>68° F</span>
+                        <i class="fa-solid fa-cloud" style="font-size: 3rem;"></i>
+                    </div>
+                </div>
+                <div class="details">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-weight: bold;">HUMIDITY</span>
+                        <span style="font-weight: 300;">98%</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-weight: bold;">AIR PRESSURE</span>
+                        <span style="font-weight: 300;">1005hPa</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-weight: bold;">VISIBILITY</span>
+                        <span style="font-weight: 300;">8km</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <span style="font-weight: bold;">WIND</span>
+                        <span style="font-weight: 300;">2mph</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Insights Section: Contains the temperature and moisture tables -->
+            <section class="insights-section">
+                <h2>Real-time Insights</h2>
+                <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #6b7280;">| production</p>
+            </section>
+
+            <!-- Temperature Insights Table -->
+            <section class="insight-card">
+                <h3>Temperature</h3>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Zone</th>
+                                <th>Temp</th>
+                                <th>Risk Level</th>
+                                <th>Recommendations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Zone A</td>
+                                <td>25°C</td>
+                                <td class="risk-level optimal">Optimal</td>
+                                <td>Monitor for trends</td>
+                            </tr>
+                            <tr>
+                                <td>Zone B</td>
+                                <td>30°C</td>
+                                <td class="risk-level warning">Warning</td>
+                                <td>Increase normal watering and shading</td>
+                            </tr>
+                            <tr>
+                                <td>Zone C</td>
+                                <td>35°C</td>
+                                <td class="risk-level stress">Heat Stress</td>
+                                <td>Install shade nets or sprinkler cooling systems.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Moisture Insights Table -->
+            <section class="insight-card">
+                <h3>Moisture</h3>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Zone</th>
+                                <th>Moisture</th>
+                                <th>Risk Level</th>
+                                <th>Recommendations</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Zone C</td>
+                                <td>20%</td>
+                                <td class="risk-level stress">Low</td>
+                                <td>Increase drip irrigation to prevent water stress.</td>
+                            </tr>
+                            <tr>
+                                <td>Zone B</td>
+                                <td>45%</td>
+                                <td class="risk-level warning">Moderate</td>
+                                <td>Monitor soil moisture but no immediate action.</td>
+                            </tr>
+                            <tr>
+                                <td>Zone A</td>
+                                <td>60%</td>
+                                <td class="risk-level optimal">Optimal</td>
+                                <td>Maintain current irrigation practices.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- General Advice Box -->
+            <section class="advice-box">
+                <div class="title-container">
+                    <i class="fa-solid fa-leaf"></i>
+                    <h3>General Advice</h3>
+                </div>
+                <p style="font-size: 0.875rem;">
+                    Monitor daily temperature trends and take preventative actions before extreme heat affects crop yield.
+                </p>
+            </section>
+        </main>
+        
+        <!-- Bottom Navigation Bar: Contains navigation links for the app -->
+        <nav class="bottom-nav">
+            <div class="nav-item active">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </div>
+            <div class="nav-item">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </div>
+            <div class="nav-item">
+                <i class="fa-solid fa-users"></i>
+                <span>Community</span>
+            </div>
+            <div class="nav-item">
+                <i class="fa-solid fa-tractor"></i>
+                <span>My Farm</span>
+            </div>
+        </nav>
+        
+    </div>
 </body>
 </html>
