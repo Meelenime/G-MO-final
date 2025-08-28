@@ -1,0 +1,219 @@
+/* Global CSS Reset & Box Sizing */
+* {
+    box-sizing: border-box;
+}
+
+/* Body and Overall Page Layout */
+body {
+    margin: 0;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+    font-family: 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Main App Container, mimicking a phone screen */
+.app-container {
+    width: 90vw;
+    max-width: 430px;
+    height: 90vh;
+    max-height: 932px;
+    background-color: #ffffff;
+    border-radius: 3rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Hides scrollbars for a clean app-like feel */
+.scroll-container {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;    /* Firefox */
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none; /* WebKit browsers (Chrome, Safari) */
+}
+
+/* Typography styles */
+h1, h2, h3 {
+    margin: 0;
+    color: #333;
+}
+
+h1 { font-size: 2em; }
+h2 { font-size: 1.5rem; }
+h3 { font-size: 1.25rem; }
+
+p {
+    margin: 0;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Specific Component Styles */
+.header {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #22c55e;
+}
+
+.header .logo-svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.header .icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.25rem;
+    color: #9ca3af;
+}
+
+.main-content {
+    flex: 1;
+    padding: 1rem 1.5rem 5rem 1.5rem;
+    overflow-y: auto;
+}
+
+.greeting {
+    margin-bottom: 1.5rem;
+}
+
+.weather-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    background-color: #22c55e;
+    color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.weather-card .location-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.weather-card .current-temp {
+    font-size: 4rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.weather-card .details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.insights-section {
+    margin-bottom: 1.5rem;
+}
+
+.insight-card {
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    margin-bottom: 1.5rem;
+}
+
+.insight-card table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.insight-card th, .insight-card td {
+    padding: 0.5rem;
+}
+
+.insight-card thead th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+}
+
+.insight-card tbody tr {
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.insight-card tbody tr:nth-child(2n) {
+    background-color: #fefce8;
+}
+
+.insight-card tbody tr:nth-child(3n) {
+    background-color: #fef2f2;
+}
+
+.insight-card .risk-level.optimal { color: #22c55e; font-weight: 500; }
+.insight-card .risk-level.warning { color: #eab308; font-weight: 500; }
+.insight-card .risk-level.stress { color: #ef4444; font-weight: 500; }
+
+.advice-box {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    border: 2px dashed #d1d5db;
+}
+
+.advice-box .title-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #22c55e;
+    font-weight: 700;
+}
+
+.bottom-nav {
+    padding: 1rem 1.5rem;
+    background-color: white;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottom-nav .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+.bottom-nav .nav-item:hover {
+    color: #22c55e;
+}
+
+.bottom-nav .nav-item.active {
+    color: #22c55e;
+}
