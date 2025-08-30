@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Farm - G.MO App</title>
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Custom CSS Styles -->
+    <style>
+        /* Global CSS Reset & Box Sizing */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Body and Overall Page Layout */
+        body {
+            margin: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+            font-family: 'Segoe UI', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Main App Container, mimicking a phone screen */
+        .app-container {
+            width: 90vw;
+            max-width: 430px;
+            height: 90vh;
+            max-height: 932px;
+            background-color: #ffffff;
+            border-radius: 3rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative; /* Added for absolute positioning of pages */
+        }
+
+        /* Hides scrollbars for a clean app-like feel */
+        .scroll-container {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;    /* Firefox */
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none; /* WebKit browsers (Chrome, Safari) */
+        }
+
+        /* Typography styles */
+        h1, h2, h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.5rem; }
+        h3 { font-size: 1.25rem; }
+
+        p {
+            margin: 0;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Specific Component Styles */
+        .header {
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+
+        .header .logo-svg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .header .icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.25rem;
+            color: #9ca3af;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 1rem 1.5rem 5rem 1.5rem;
+            overflow-y: auto;
+        }
+
+        .greeting {
+            margin-bottom: 1.5rem;
+        }
+
+        .weather-card {
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: #22c55e;
+            color: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .weather-card .location-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .weather-card .current-temp {
+            font-size: 4rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .weather-card .details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        .insights-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .insight-card {
+            background-color: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+            margin-bottom: 1.5rem;
+        }
+
+        .insight-card table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .insight-card th, .insight-card td {
+            padding: 0.5rem;
+        }
+
+        .insight-card thead th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+        }
+
+        .insight-card tbody tr {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .insight-card tbody tr:nth-child(2n) {
+            background-color: #fefce8;
+        }
+
+        .insight-card tbody tr:nth-child(3n) {
+            background-color: #fef2f2;
+        }
+
+        .insight-card .risk-level.optimal { color: #22c55e; font-weight: 500; }
+        .insight-card .risk-level.warning { color: #eab308; font-weight: 500; }
+        .insight-card .risk-level.stress { color: #ef4444; font-weight: 500; }
+
+        .advice-box {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 2px dashed #d1d5db;
+        }
+
+        .advice-box .title-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #22c55e;
+            font-weight: 700;
+        }
+
+        .bottom-nav {
+            padding: 1rem 1.5rem;
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bottom-nav .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .bottom-nav .nav-item:hover {
+            color: #22c55e;
+        }
+
+        .bottom-nav .nav-item.active {
+            color: #22c55e;
+        }
+
+        /* Farm Page Header */
+        .farm-header {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .farm-header .back-btn {
+            font-size: 1.5rem;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .farm-header .back-btn:hover {
+            color: #22c55e;
+        }
+
+        .farm-header .title-container {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #22c55e;
+        }
+
+        .farm-header .icons {
+            font-size: 1.5rem;
+            color: #22c55e;
+        }
+
+        /* Main Farm Content Area */
+        .farm-content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 5rem;
+        }
+        
+        /* Zone Details Page Styles */
+        #zone-details-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            z-index: 10;
+        }
+        
+        .zone-details-header {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .zone-details-header .back-btn {
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        .zone-details-header .zone-selector {
+            background-color: #173824;
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+        }
+        
+        .zone-details-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding-bottom: 6rem;
+        }
+
+        .current-status-title {
+            width: 100%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .status-cards {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 1rem;
+        }
+
+        .status-card {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .status-card .percentage {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #22c55e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .status-card .title {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Specific card styles */
+        .card-nutrients ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            font-size: 0.8rem;
+        }
+
+        .card-nutrients li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .card-humidity .play-icon {
+            font-size: 2.5rem;
+            color: #22c55e;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .card-humidity .temp {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            position: absolute;
+            bottom: 0.5rem;
+            right: 0.5rem;
+        }
+        
+        .card-moisture .gauge-container {
+            width: 80%;
+            height: 80%;
+            position: relative;
+        }
+        
+        .card-moisture .gauge-container .gauge {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from 180deg at 50% 50%, #d1d5db 0%, #d1d5db 100%);
+            border: 5px solid #d1d5db;
+        }
+
+        .card-moisture .gauge-container .gauge-fill {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            background: white;
+            transform: translate(-50%, -50%);
+        }
+
+        .card-moisture .gauge-container .gauge-needle {
+            position: absolute;
+            width: 50%;
+            height: 5px;
+            background-color: #ef4444;
+            transform-origin: 100% 50%;
+            top: 50%;
+            left: 0%;
+            transform: rotate(100deg); /* Example rotation for 52% */
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-moisture .gauge-container .gauge-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .action-button {
+            background-color: #173824;
+            color: white;
+            padding: 1.5rem 1rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .action-button:hover {
+            background-color: #224a30;
+        }
+
+        /* Farm Visuals */
+        .farm-visual {
+            position: relative;
+            width: 100%;
+            padding: 1rem 1rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .farm-visual svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Overlay for "Click on an area" message */
+        .overlay-message {
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5rem 1rem;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 0.875rem;
+            border-radius: 1.5rem;
+            white-space: nowrap;
+        }
+
+        /* Farm Zone Indicators */
+        .zone-indicators {
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem 0.5rem;
+            gap: 0.5rem;
+        }
+
+        .zone-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 1.5rem;
+            padding: 1rem 0.75rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .zone-card .zone-title {
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .zone-card .zone-subtitle {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+        }
+
+        .zone-card .graph-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 0.5rem;
+            height: 6rem;
+            width: 100%;
+            padding: 0 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .zone-card .graph-bar {
+            width: 30%;
+            border-radius: 0.5rem;
+            position: relative;
+            background: linear-gradient(to top, #ef4444 0%, #eab308 50%, #22c55e 100%);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Water Simulation Page Styles */
+        #water-simulation-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            z-index: 20;
+        }
+
+        .simulation-header {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+        }
+
+        .simulation-header .back-btn {
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .simulation-header .title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .simulation-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .water-level-card {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .water-level-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .water-level-card .levels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+        
+        .water-level-card .water-bar-container {
+            width: 100%;
+            height: 1.25rem;
+            background-color: #d1d5db;
+            border-radius: 0.625rem;
+            margin: 0.5rem 0;
+            position: relative;
+        }
+        
+        .water-level-card .water-bar {
+            height: 100%;
+            background-color: #2563eb;
+            border-radius: 0.625rem;
+            transition: width 0.3s ease-in-out;
+        }
+        
+        .water-level-card .water-percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .water-level-card .water-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: #d1d5db;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        
+        .water-level-card .water-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #2563eb;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .water-level-card .water-slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #2563eb;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .nutrient-level-card {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .nutrient-level-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .nutrient-level-card h4 span {
+            font-weight: 400;
+            color: #ef4444;
+        }
+
+        .nutrient-bar-row {
+            margin-bottom: 1rem;
+        }
+
+        .nutrient-bar-row .nutrient-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+        
+        .nutrient-bar-row .bar-container {
+            width: 100%;
+            height: 1rem;
+            background-color: #d1d5db;
+            border-radius: 0.5rem;
+        }
+
+        .nutrient-bar-row .bar {
+            height: 100%;
+            background-color: #22c55e;
+            border-radius: 0.5rem;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .prediction-section {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .prediction-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .prediction-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .prediction-section li {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .prediction-section li i {
+            color: #ef4444;
+        }
+
+        .prediction-section li.good-icon i {
+            color: #22c55e;
+        }
+
+        .action-items-section {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-items-section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-items-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .action-items-section li {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .action-items-section li i {
+            color: #22c55e;
+        }
+
+        .simulation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .simulation-buttons .run-simulation-btn {
+            background-color: #22c55e;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Main App Container: Simulates a mobile phone screen -->
+    <div class="app-container">
+        
+        <!-- Farm Page Header -->
+        <header class="farm-header">
+            <i class="fa-solid fa-arrow-left back-btn"></i>
+            <div class="title-container">My Farm</div>
+            <i class="fa-solid fa-bell icons"></i>
+        </header>
+
+        <!-- Farm Content Area -->
+        <div class="farm-content scroll-container">
+            <!-- Overlay Message -->
+            <div class="overlay-message">click on An Area for more information</div>
+
+            <!-- Isometric Farm Visual (Simplified SVG) -->
+            <div class="farm-visual">
+                <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+                    <!-- Base farm area -->
+                    <polygon points="200,50 350,150 200,250 50,150" fill="#a3e635" stroke="#84cc16" stroke-width="2"/>
+                    
+                    <!-- Zone A -->
+                    <polygon points="175,75 225,100 225,180 175,155" fill="#d9f991" id="zone-a" class="zone-field"/>
+                    <text x="200" y="130" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">Zone A</text>
+
+                    <!-- Zone B -->
+                    <polygon points="225,100 275,125 275,205 225,180" fill="#ecfccb" id="zone-b" class="zone-field"/>
+                    <text x="250" y="150" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">Zone B</text>
+
+                    <!-- Zone C -->
+                    <polygon points="225,180 275,205 275,285 225,260" fill="#f7fee7" id="zone-c" class="zone-field"/>
+                    <text x="250" y="230" font-family="Arial" font-size="12" fill="#333" text-anchor="middle">Zone C</text>
+
+                    <!-- Farm building -->
+                    <polygon points="120,130 180,160 180,210 120,180" fill="#78350f" stroke="#5b210b" stroke-width="1.5"/>
+                    <rect x="130" y="165" width="20" height="15" fill="#fef08a"/>
+                </svg>
+            </div>
+            
+            <!-- Zone Health Indicators -->
+            <div class="zone-indicators">
+                <div class="zone-card">
+                    <div class="zone-title">Zone A</div>
+                    <div class="zone-subtitle">Soil Health Moisture Humidity</div>
+                    <div class="graph-container">
+                        <div class="graph-bar" id="zone-a-bar-1" style="height: 30%;"></div>
+                        <div class="graph-bar" id="zone-a-bar-2" style="height: 70%;"></div>
+                        <div class="graph-bar" id="zone-a-bar-3" style="height: 45%;"></div>
+                    </div>
+                </div>
+                
+                <div class="zone-card">
+                    <div class="zone-title">Zone B</div>
+                    <div class="zone-subtitle">Soil Health Moisture Humidity</div>
+                    <div class="graph-container">
+                        <div class="graph-bar" id="zone-b-bar-1" style="height: 80%;"></div>
+                        <div class="graph-bar" id="zone-b-bar-2" style="height: 50%;"></div>
+                        <div class="graph-bar" id="zone-b-bar-3" style="height: 90%;"></div>
+                    </div>
+                </div>
+                
+                <div class="zone-card">
+                    <div class="zone-title">Zone C</div>
+                    <div class="zone-subtitle">Soil Health Moisture Humidity</div>
+                    <div class="graph-container">
+                        <div class="graph-bar" id="zone-c-bar-1" style="height: 50%;"></div>
+                        <div class="graph-bar" id="zone-c-bar-2" style="height: 65%;"></div>
+                        <div class="graph-bar" id="zone-c-bar-3" style="height: 85%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Zone Details Page (Hidden by default) -->
+        <div id="zone-details-page">
+            <header class="zone-details-header">
+                <i class="fa-solid fa-arrow-left back-btn"></i>
+                <div class="zone-selector">Zone A</div>
+                <i class="fa-solid fa-bell"></i>
+            </header>
+            <div class="zone-details-content scroll-container">
+                <h3 class="current-status-title">Current Status</h3>
+                <div class="status-cards">
+                    <div class="status-card card-nutrients">
+                        <div class="percentage">60%</div>
+                        <div class="title">Average Nutrient Levels</div>
+                        <ul>
+                            <li><i class="fa-solid fa-circle-exclamation" style="color:#eab308;"></i> Nitrogen(N): 45%</li>
+                            <li><i class="fa-solid fa-check-circle" style="color:#22c55e;"></i> Phosphorus(P): 70%</li>
+                            <li><i class="fa-solid fa-times-circle" style="color:#ef4444;"></i> Potassium(K): 45%</li>
+                        </ul>
+                    </div>
+                    <div class="status-card card-humidity">
+                        <div class="percentage">50%</div>
+                        <div class="title">Relative Humidity</div>
+                        <i class="fa-solid fa-play-circle play-icon"></i>
+                        <span class="temp">27°</span>
+                    </div>
+                    <div class="status-card card-moisture">
+                        <div class="percentage">52%</div>
+                        <div class="title">Soil Moisture</div>
+                        <div class="gauge-container">
+                            <div class="gauge"></div>
+                            <div class="gauge-fill"></div>
+                            <div class="gauge-label">52</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <div class="action-button" id="apply-water-btn">Apply Water</div>
+                    <div class="action-button">Add Nutrients</div>
+                    <div class="action-button">Check Crop Health</div>
+                    <div class="action-button">Full Simulation</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Water Simulation Page (Hidden by default) -->
+        <div id="water-simulation-page">
+            <header class="simulation-header">
+                <i class="fa-solid fa-arrow-left back-btn"></i>
+                <div class="title">Farm Water and Nutrient Simulation</div>
+                <i class="fa-solid fa-bell"></i>
+            </header>
+            <div class="simulation-content scroll-container">
+                <!-- Water Level -->
+                <div class="water-level-card">
+                    <h4><i class="fa-solid fa-water" style="color:#2563eb;"></i> Water Level</h4>
+                    <div class="levels">
+                        <span>0% (0 gallons)</span>
+                        <span>100% (500 gallons)</span>
+                    </div>
+                    <div class="water-bar-container">
+                        <div class="water-bar" style="width: 50%;"></div>
+                        <span class="water-percentage">50% (250 gallons)</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="50" class="water-slider" id="water-slider">
+                </div>
+
+                <!-- Nutrient Level -->
+                <div class="nutrient-level-card">
+                    <h4 id="nutrient-title"><i class="fa-solid fa-leaf" style="color:#22c55e;"></i> Nutrient Level <span id="nutrient-status">50% (Good)</span></h4>
+                    <div class="nutrient-bar-row">
+                        <div class="nutrient-label">Nitrogen(N): <span class="nutrient-value">55%</span></div>
+                        <div class="bar-container">
+                            <div class="bar" id="n-bar" style="width: 55%;" data-initial-value="55"></div>
+                        </div>
+                    </div>
+                    <div class="nutrient-bar-row">
+                        <div class="nutrient-label">Phosphorus(P): <span class="nutrient-value">70%</span></div>
+                        <div class="bar-container">
+                            <div class="bar" id="p-bar" style="width: 70%;" data-initial-value="70"></div>
+                        </div>
+                    </div>
+                    <div class="nutrient-bar-row">
+                        <div class="nutrient-label">Potassium(K): <span class="nutrient-value">60%</span></div>
+                        <div class="bar-container">
+                            <div class="bar" id="k-bar" style="width: 60%;" data-initial-value="60"></div>
+                        </div>
+                    </div>
+                    <div class="nutrient-bar-row">
+                        <div class="nutrient-label">Calcium(Ca): <span class="nutrient-value">40%</span></div>
+                        <div class="bar-container">
+                            <div class="bar" id="ca-bar" style="width: 40%;" data-initial-value="40"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prediction Section -->
+                <div class="prediction-section">
+                    <h4>Prediction</h4>
+                    <ul id="prediction-list">
+                        <li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Crop Health: Optimal (Healthy growth)</li>
+                        <li><i class="fa-solid fa-arrow-up" style="color:#22c55e;"></i> Yield Projection: +15% (Ideal conditions)</li>
+                        <li><i class="fa-solid fa-droplet" style="color:#2563eb;"></i> Water Usage Efficiency: Efficient usage detected</li>
+                        <li><i class="fa-solid fa-seedling" style="color:#22c55e;"></i> Soil Nutrients: Well-balanced nutrients, no action required</li>
+                        <li><i class="fa-solid fa-bell" style="color:#eab308;"></i> Alerts: Check moisture again tomorrow morning.</li>
+                    </ul>
+                </div>
+
+                <!-- Action Items Section -->
+                <div class="action-items-section">
+                    <h4>Action Items</h4>
+                    <ul id="action-items-list">
+                        <li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Maintain current water schedule and monitor soil moisture.</li>
+                        <li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Consider a small application of nitrogen in two weeks.</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Simulation Buttons -->
+            <div class="simulation-buttons">
+                <div class="action-button run-simulation-btn">Run Simulation</div>
+                <div class="action-button">Stop watering</div>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <div class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </div>
+            <div class="nav-item">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </div>
+            <div class="nav-item">
+                <i class="fa-solid fa-user-group"></i>
+                <span>Community</span>
+            </div>
+            <div class="nav-item active">
+                <i class="fa-solid fa-tractor"></i>
+                <span>My Farm</span>
+            </div>
+        </nav>
+        
+    </div>
+    
+    <!-- JavaScript for page interactivity -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const farmZones = document.querySelectorAll('.zone-field');
+            const overlayMessage = document.querySelector('.overlay-message');
+            const mainFarmPage = document.querySelector('.farm-content');
+            const zoneDetailsPage = document.getElementById('zone-details-page');
+            const zoneDetailsBackBtn = document.querySelector('#zone-details-page .back-btn');
+            const applyWaterBtn = document.getElementById('apply-water-btn');
+            const waterSimulationPage = document.getElementById('water-simulation-page');
+            const simulationBackBtn = document.querySelector('#water-simulation-page .back-btn');
+            
+            // Simulation elements
+            const waterSlider = document.getElementById('water-slider');
+            const waterBar = document.querySelector('.water-bar');
+            const waterPercentageText = document.querySelector('.water-percentage');
+            const nutrientStatus = document.getElementById('nutrient-status');
+            const predictionList = document.getElementById('prediction-list');
+            const actionItemsList = document.getElementById('action-items-list');
+            const nutrientBars = {
+                'n': document.getElementById('n-bar'),
+                'p': document.getElementById('p-bar'),
+                'k': document.getElementById('k-bar'),
+                'ca': document.getElementById('ca-bar')
+            };
+            const nutrientValues = {
+                'n': document.querySelector('#n-bar + span'),
+                'p': document.querySelector('#p-bar + span'),
+                'k': document.querySelector('#k-bar + span'),
+                'ca': document.querySelector('#ca-bar + span')
+            };
+
+            const initialNutrientValues = {
+                'n': parseInt(nutrientBars.n.dataset.initialValue, 10),
+                'p': parseInt(nutrientBars.p.dataset.initialValue, 10),
+                'k': parseInt(nutrientBars.k.dataset.initialValue, 10),
+                'ca': parseInt(nutrientBars.ca.dataset.initialValue, 10)
+            };
+
+            function updateWaterDisplay(waterLevel) {
+                const gallons = Math.round(waterLevel * 500 / 100);
+                waterBar.style.width = waterLevel + '%';
+                waterPercentageText.textContent = `${waterLevel}% (${gallons} gallons)`;
+            }
+
+            function updateNutrientLevels(waterLevel) {
+                // A simplified model: more water dilutes nutrients, but not all equally.
+                const dilutionFactor = (waterLevel - 50) / 100; // Negative for <50, positive for >50
+                const updatedNutrients = {};
+
+                for (const key in initialNutrientValues) {
+                    let newValue = initialNutrientValues[key];
+                    if (waterLevel > 60) {
+                        newValue -= (waterLevel - 60) * 0.5; // Dilution effect
+                    } else if (waterLevel < 40) {
+                        newValue -= (40 - waterLevel) * 0.2; // Minor deficiency from low water
+                    }
+                    // Prevent values from going below 0 or above 100
+                    updatedNutrients[key] = Math.max(0, Math.min(100, Math.round(newValue)));
+                }
+
+                // Update the UI with new nutrient values and bar colors
+                for (const key in updatedNutrients) {
+                    const value = updatedNutrients[key];
+                    nutrientBars[key].style.width = value + '%';
+                    
+                    // Set color based on value
+                    if (value < 40) {
+                        nutrientBars[key].style.backgroundColor = '#ef4444'; // Red
+                    } else if (value >= 40 && value < 60) {
+                        nutrientBars[key].style.backgroundColor = '#eab308'; // Yellow
+                    } else {
+                        nutrientBars[key].style.backgroundColor = '#22c55e'; // Green
+                    }
+                }
+                
+                // Update nutrient value text
+                document.querySelectorAll('.nutrient-level-card .nutrient-value').forEach((el, index) => {
+                    const keys = ['n', 'p', 'k', 'ca'];
+                    el.textContent = `${updatedNutrients[keys[index]]}%`;
+                });
+
+                // Update the overall nutrient status
+                const averageNutrient = Object.values(updatedNutrients).reduce((sum, val) => sum + val, 0) / Object.keys(updatedNutrients).length;
+                if (averageNutrient < 45) {
+                    nutrientStatus.textContent = `${Math.round(averageNutrient)}% (Poor)`;
+                    nutrientStatus.style.color = '#ef4444';
+                } else if (averageNutrient >= 45 && averageNutrient < 70) {
+                    nutrientStatus.textContent = `${Math.round(averageNutrient)}% (Good)`;
+                    nutrientStatus.style.color = '#eab308';
+                } else {
+                    nutrientStatus.textContent = `${Math.round(averageNutrient)}% (Excellent)`;
+                    nutrientStatus.style.color = '#22c55e';
+                }
+            }
+
+            function generatePrediction(waterLevel, nutrients) {
+                // Clear existing lists
+                predictionList.innerHTML = '';
+                actionItemsList.innerHTML = '';
+
+                let predictionHtml = '';
+                let actionItemsHtml = '';
+
+                // Water-based predictions
+                if (waterLevel > 75) {
+                    predictionHtml += `<li><i class="fa-solid fa-xmark" style="color:#ef4444;"></i> Crop Health: At risk of root rot.</li>`;
+                    predictionHtml += `<li><i class="fa-solid fa-arrow-down" style="color:#ef4444;"></i> Yield Projection: -20% due to waterlogging.</li>`;
+                    actionItemsHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Immediately stop watering to prevent further saturation.</li>`;
+                    actionItemsHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Improve drainage with soil aeration.</li>`;
+                } else if (waterLevel < 25) {
+                    predictionHtml += `<li><i class="fa-solid fa-exclamation" style="color:#eab308;"></i> Crop Health: Showing signs of drought stress.</li>`;
+                    predictionHtml += `<li><i class="fa-solid fa-arrow-down" style="color:#eab308;"></i> Yield Projection: -10% due to dehydration.</li>`;
+                    actionItemsHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Increase irrigation frequency for the next few days.</li>`;
+                    actionItemsHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Consider deep watering to encourage root growth.</li>`;
+                } else {
+                    predictionHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Crop Health: Optimal (Healthy growth)</li>`;
+                    predictionHtml += `<li><i class="fa-solid fa-arrow-up" style="color:#22c55e;"></i> Yield Projection: +15% (Ideal conditions)</li>`;
+                    actionItemsHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Maintain current water schedule and monitor soil moisture.</li>`;
+                }
+
+                // Nutrient-based predictions (simplified)
+                if (nutrients.n < 40) {
+                    predictionHtml += `<li><i class="fa-solid fa-exclamation" style="color:#eab308;"></i> Soil Nutrients: Low nitrogen, potential for yellowing leaves.</li>`;
+                    actionItemsHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Apply a nitrogen-rich fertilizer.</li>`;
+                }
+                if (nutrients.p < 40) {
+                    predictionHtml += `<li><i class="fa-solid fa-exclamation" style="color:#eab308;"></i> Soil Nutrients: Low phosphorus, affects root development.</li>`;
+                    actionItemsHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Consider a phosphorus supplement.</li>`;
+                }
+                if (nutrients.k < 40) {
+                    predictionHtml += `<li><i class="fa-solid fa-exclamation" style="color:#eab308;"></i> Soil Nutrients: Low potassium, reduces disease resistance.</li>`;
+                    actionItemsHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Use a potassium-based fertilizer.</li>`;
+                }
+                if (nutrients.ca < 40) {
+                    predictionHtml += `<li><i class="fa-solid fa-exclamation" style="color:#eab308;"></i> Soil Nutrients: Low calcium, affects cell wall strength.</li>`;
+                    actionItemsHtml += `<li><i class="fa-solid fa-check" style="color:#22c55e;"></i> Add calcium-rich soil amendments.</li>`;
+                }
+
+                predictionList.innerHTML = predictionHtml;
+                actionItemsList.innerHTML = actionItemsHtml;
+            }
+
+            function updateSimulation() {
+                const waterLevel = waterSlider.value;
+                updateWaterDisplay(waterLevel);
+                updateNutrientLevels(waterLevel);
+                
+                const currentNutrients = {};
+                for (const key in nutrientBars) {
+                    currentNutrients[key] = parseInt(nutrientBars[key].style.width, 10);
+                }
+                generatePrediction(waterLevel, currentNutrients);
+            }
+            
+            // Initial call to set up the page
+            updateSimulation();
+
+            farmZones.forEach(zone => {
+                zone.addEventListener('click', (e) => {
+                    const zoneId = e.target.id;
+                    console.log(`You clicked on ${zoneId}!`);
+                    if (overlayMessage) {
+                        overlayMessage.style.display = 'none';
+                    }
+                    
+                    // Show the new details page and hide the main farm page
+                    if (zoneDetailsPage) {
+                        mainFarmPage.style.display = 'none';
+                        zoneDetailsPage.style.display = 'flex';
+                    }
+                });
+            });
+
+            // The back button on the main farm page
+            const mainPageBackBtn = document.querySelector('.farm-header .back-btn');
+            if (mainPageBackBtn) {
+                mainPageBackBtn.addEventListener('click', () => {
+                    console.log('Back button clicked!');
+                    // In a multi-page app, this would handle navigation.
+                });
+            }
+            
+            // The back button on the new details page
+            if (zoneDetailsBackBtn) {
+                zoneDetailsBackBtn.addEventListener('click', () => {
+                    // Hide the details page and show the main farm page again
+                    zoneDetailsPage.style.display = 'none';
+                    mainFarmPage.style.display = 'flex';
+                });
+            }
+
+            // The Apply Water button
+            if (applyWaterBtn) {
+                applyWaterBtn.addEventListener('click', () => {
+                    // Hide the zone details page and show the water simulation page
+                    zoneDetailsPage.style.display = 'none';
+                    waterSimulationPage.style.display = 'flex';
+                });
+            }
+
+            // The back button on the water simulation page
+            if (simulationBackBtn) {
+                simulationBackBtn.addEventListener('click', () => {
+                    // Hide the water simulation page and show the zone details page
+                    waterSimulationPage.style.display = 'none';
+                    zoneDetailsPage.style.display = 'flex';
+                });
+            }
+
+            // Event listener for the water slider
+            if (waterSlider) {
+                waterSlider.addEventListener('input', updateSimulation);
+            }
+            
+            // Event listener for the "Run Simulation" button (optional, but good practice)
+            const runSimulationBtn = document.querySelector('.run-simulation-btn');
+            if (runSimulationBtn) {
+                runSimulationBtn.addEventListener('click', updateSimulation);
+            }
+        });
+    </script>
+</body>
+</html>
