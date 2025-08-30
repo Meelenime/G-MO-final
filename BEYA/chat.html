@@ -1,18 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Chat Interface</title>
-    <link rel="stylesheet" href="style.css">
+    <title>G.MO Chat Interface</title>
+
+
+
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!--CSS  -->
+    <style>
+        /* Global CSS Reset & Sizing */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Body and Overall Page Layout */
+        body {
+            margin: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+            font-family: 'Segoe UI', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Main App Container, mimicking a phone screen */
+        .app-container {
+            width: 90vw;
+            max-width: 430px;
+            height: 90vh;
+            max-height: 932px;
+            background-color: #ffffff;
+            border-radius: 3rem;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            padding: 1.25rem;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #22c55e;
+            text-align: center;
+        }
+
+        /* Chat Messages Container */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;    /* Firefox */
+        }
+
+        /* Hide scrollbar for a cleaner look */
+        .chat-messages::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Message Bubble Styles */
+        .message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 1.25rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message.received {
+            background-color: #f3f4f6;
+            color: #4b5563;
+            align-self: flex-start;
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        .message.sent {
+            background-color: #22c55e;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0.25rem;
+        }
+
+        /* Chat Input Area */
+        .chat-input {
+            padding: 1rem 1.5rem;
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 1.5rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input input:focus {
+            border-color: #22c55e;
+        }
+
+        .chat-input button {
+            background-color: #22c55e;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .chat-input button:hover {
+            background-color: #15803d;
+        }
+
+        /* Utility classes */
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h3>Basic Chat</h3>
-        </div>
-        <div class="chat-messages">
+
+
+
+
+    
+
+    <!-- Main App Container: Simulates a mobile phone screen -->
+    <div class="app-container">
+        
+        <!-- Chat Header: Displays the chat title -->
+        <header class="chat-header" style="display: flex; align-items: center; gap: 1rem;" >
+            <a href="prototype.html" style="color: #22c55e; text-decoration: none; font-size: 1.5rem;">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <h3 style="margin: 0;"> SMART CHATBOT </h3>
+        </header>
+
+        <!-- Chat Messages Container: This is where messages are displayed -->
+        <div class="chat-messages" id="chat-messages">
+            <!-- Initial static messages -->
             <div class="message received">
                 <p>Hello! Welcome to the chat.</p>
             </div>
@@ -20,11 +171,76 @@
                 <p>Hi there!</p>
             </div>
         </div>
+
+        <!-- Chat Input Area: Contains the input field and send button -->
         <div class="chat-input">
             <input type="text" id="message-input" placeholder="Type a message...">
             <button id="send-button">Send</button>
         </div>
+        
     </div>
-    <script src="script.js"></script>
+    
+
+
+
+
+
+
+
+    <!-- JavaScript for chat functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get DOM elements
+            const chatMessages = document.getElementById('chat-messages');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+
+            /**
+             * Appends a new message bubble to the chat interface.
+             * @param {string} text - The text content of the message.
+             * @param {string} type - The type of message ('sent' or 'received').
+             */
+            function appendMessage(text, type) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', type);
+                messageDiv.innerHTML = `<p>${text}</p>`;
+                chatMessages.appendChild(messageDiv);
+                
+                // Automatically scroll to the bottom to show the newest message
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            /**
+             * Sends a new message from the user.
+             */
+            function sendMessage() {
+                const messageText = messageInput.value.trim();
+                
+                // Do nothing if the input is empty
+                if (messageText === '') {
+                    return;
+                }
+
+                // Add the user's message to the chat
+                appendMessage(messageText, 'sent');
+                messageInput.value = '';
+
+                // Simulate a bot's response after a short delay
+                setTimeout(() => {
+                    appendMessage("Thank you for your message! This is a simple demo chat.", "received");
+                }, 500);
+            }
+
+            // Event listener for the Send button
+            sendButton.addEventListener('click', sendMessage);
+
+            // Event listener for the Enter key on the input field
+            messageInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
