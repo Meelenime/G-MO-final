@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G.MO - Community Forums</title>
+    <!-- Use Inter font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-50 text-gray-800;
+        }
+
+        .app-container {
+            @apply w-full max-w-sm mx-auto flex flex-col h-screen overflow-hidden shadow-2xl rounded-2xl border border-gray-200;
+        }
+
+        .header {
+            @apply flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm z-10;
+        }
+
+        .logo {
+            @apply flex items-center space-x-2 text-xl font-bold text-gray-900;
+        }
+
+        .logo i {
+            @apply text-green-600 text-2xl;
+        }
+
+        .logo span {
+            @apply hidden sm:block;
+        }
+
+        .icons {
+            @apply flex items-center space-x-4 text-gray-600;
+        }
+
+        .main-content {
+            @apply flex-grow overflow-y-auto p-4 transition-all duration-300 ease-in-out;
+        }
+
+        .scroll-container {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, and Opera */
+        }
+
+        .bottom-nav {
+            @apply flex justify-around items-center bg-white border-t border-gray-200 shadow-lg p-3;
+        }
+
+        .nav-item {
+            @apply flex flex-col items-center text-gray-500 font-medium text-xs transition-colors duration-200;
+        }
+
+        .nav-item.active,
+        .nav-item:hover {
+            @apply text-green-600;
+        }
+
+        .nav-item i {
+            @apply text-lg mb-1;
+        }
+
+        .forum-card {
+            @apply flex items-center justify-between p-4 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer;
+        }
+
+        .forum-card:not(:last-child) {
+            @apply mb-3;
+        }
+
+        .forum-card .icon {
+            @apply p-3 bg-green-100 text-green-600 rounded-lg;
+        }
+
+        .forum-card .details {
+            @apply flex-grow ml-4;
+        }
+
+        .forum-card .details h3 {
+            @apply text-base font-semibold text-gray-900;
+        }
+
+        .forum-card .details p {
+            @apply text-sm text-gray-500;
+        }
+
+        .post-card {
+            @apply bg-white p-4 rounded-xl shadow-md mb-3;
+        }
+
+        .post-card h4 {
+            @apply font-semibold text-gray-900 mb-1;
+        }
+
+        .post-card p {
+            @apply text-sm text-gray-600;
+        }
+
+        .post-card .post-meta {
+            @apply text-xs text-gray-400 mt-2;
+        }
+
+        .new-post-form {
+            @apply p-4 bg-white rounded-xl shadow-lg mt-4;
+        }
+
+        .new-post-form textarea {
+            @apply w-full h-24 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 transition-shadow duration-300;
+        }
+
+        .new-post-form button {
+            @apply mt-2 w-full py-2 px-4 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200;
+        }
+
+        .back-button {
+            @apply text-green-600 font-semibold mb-4 flex items-center space-x-1;
+        }
+
+        /* Modal styling */
+        .modal {
+            @apply fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900 bg-opacity-50;
+        }
+
+        .modal-content {
+            @apply bg-white p-6 rounded-lg shadow-xl max-w-xs w-full text-center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <i class="fa-solid fa-earth-americas"></i>
+                <span>Community</span>
+            </div>
+            <div class="icons">
+                <p id="user-id-display" class="text-xs text-gray-500"></p>
+                <i class="fa-solid fa-gear"></i>
+            </div>
+        </header>
+
+        <main id="main-content" class="main-content scroll-container">
+            <!-- Content will be rendered here by JavaScript -->
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+            <a href="#" class="nav-item active">
+                <i class="fa-solid fa-users"></i>
+                <span>Community</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-tractor"></i>
+                <span>My Farm</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Custom modal for messages -->
+    <div id="message-modal" class="modal hidden">
+        <div class="modal-content">
+            <p id="modal-message" class="text-gray-800"></p>
+            <button id="modal-close-button" class="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">OK</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, query, where, onSnapshot, addDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // IMPORTANT: Use the global variables provided by the Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db, auth;
+        let userId = null;
+        let currentState = {
+            view: 'forums', // 'forums' or 'posts'
+            currentForum: null
+        };
+        const mainContent = document.getElementById('main-content');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const forums = [
+            { name: "soil", icon: "fa-seedling", title: "Soil Health & Nutrients" },
+            { name: "farm machinery", icon: "fa-tractor", title: "Farm Machinery" },
+            { name: "crops cattle", icon: "fa-cow", title: "Crops & Cattle" },
+            { name: "local farmers data", icon: "fa-map-location-dot", title: "Local Farmers Data" }
+        ];
+
+        // Custom modal function for messages (replaces alert)
+        function showMessage(message) {
+            const modal = document.getElementById('message-modal');
+            const modalMessage = document.getElementById('modal-message');
+            const modalCloseButton = document.getElementById('modal-close-button');
+
+            modalMessage.textContent = message;
+            modal.classList.remove('hidden');
+
+            modalCloseButton.onclick = () => {
+                modal.classList.add('hidden');
+            };
+        }
+
+        function renderForums() {
+            mainContent.innerHTML = `
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Explore Community Forums</h2>
+                <div id="forum-list"></div>
+            `;
+            const forumList = document.getElementById('forum-list');
+            forums.forEach(forum => {
+                const forumCard = document.createElement('div');
+                forumCard.className = 'forum-card';
+                forumCard.innerHTML = `
+                    <div class="icon">
+                        <i class="fa-solid ${forum.icon} text-lg"></i>
+                    </div>
+                    <div class="details">
+                        <h3>${forum.title}</h3>
+                        <p>${forum.name}</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-gray-400"></i>
+                `;
+                forumCard.addEventListener('click', () => {
+                    currentState.currentForum = forum.name;
+                    currentState.view = 'posts';
+                    renderPosts();
+                });
+                forumList.appendChild(forumCard);
+            });
+        }
+
+        function renderPosts() {
+            if (!currentState.currentForum) {
+                renderForums();
+                return;
+            }
+
+            mainContent.innerHTML = `
+                <button id="back-button" class="back-button"><i class="fa-solid fa-arrow-left"></i> Back to Forums</button>
+                <h2 class="text-xl font-bold text-gray-900 mb-4">${forums.find(f => f.name === currentState.currentForum).title}</h2>
+                <div id="posts-container"></div>
+                <div class="new-post-form">
+                    <h3 class="font-semibold text-gray-900 mb-2">Create a New Post</h3>
+                    <form id="new-post-form">
+                        <textarea id="post-content" placeholder="What's on your mind?" required></textarea>
+                        <button type="submit">Post</button>
+                    </form>
+                </div>
+            `;
+
+            const postsContainer = document.getElementById('posts-container');
+            const newPostForm = document.getElementById('new-post-form');
+            const backButton = document.getElementById('back-button');
+
+            backButton.addEventListener('click', () => {
+                currentState.view = 'forums';
+                renderForums();
+            });
+
+            newPostForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const postContent = document.getElementById('post-content').value;
+                if (!postContent.trim()) {
+                    showMessage("Post content cannot be empty.");
+                    return;
+                }
+                const newPost = {
+                    forumName: currentState.currentForum,
+                    authorId: userId,
+                    message: postContent,
+                    createdAt: serverTimestamp()
+                };
+                try {
+                    const forumsRef = collection(db, `artifacts/${appId}/public/data/forums`);
+                    await addDoc(forumsRef, newPost);
+                    document.getElementById('post-content').value = '';
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                    showMessage("Error creating post. Please try again.");
+                }
+            });
+
+            // Listen for real-time updates to posts
+            const forumsRef = collection(db, `artifacts/${appId}/public/data/forums`);
+            const q = query(forumsRef, where("forumName", "==", currentState.currentForum));
+            
+            onSnapshot(q, (querySnapshot) => {
+                postsContainer.innerHTML = '';
+                if (querySnapshot.empty) {
+                    postsContainer.innerHTML = '<p class="text-center text-gray-500">No posts yet. Be the first to start a conversation!</p>';
+                    return;
+                }
+                querySnapshot.docs.forEach(doc => {
+                    const post = doc.data();
+                    const postCard = document.createElement('div');
+                    postCard.className = 'post-card';
+                    const formattedDate = post.createdAt ? new Date(post.createdAt.seconds * 1000).toLocaleString() : 'Just now';
+                    postCard.innerHTML = `
+                        <p class="text-sm font-medium text-gray-700">${post.message}</p>
+                        <p class="post-meta">by ${post.authorId} · ${formattedDate}</p>
+                    `;
+                    postsContainer.appendChild(postCard);
+                });
+            });
+        }
+
+        async function initApp() {
+            if (Object.keys(firebaseConfig).length > 0) {
+                try {
+                    const app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+                    setLogLevel('debug'); // Enable debug logging for Firestore
+
+                    // Use onAuthStateChanged to manage user state
+                    onAuthStateChanged(auth, async (user) => {
+                        if (user) {
+                            userId = user.uid;
+                            userIdDisplay.textContent = `${userId}`;
+                        } else {
+                            // Fallback to anonymous sign-in if no user is found
+                            try {
+                                const anonUserCred = await signInAnonymously(auth);
+                                userId = anonUserCred.user.uid;
+                                userIdDisplay.textContent = `${userId}`;
+                            } catch (e) {
+                                console.error("Error signing in anonymously:", e);
+                                userIdDisplay.textContent = 'Auth Failed';
+                                showMessage("Could not sign in. Please try again later.");
+                            }
+                        }
+                        renderForums();
+                    });
+
+                    // Sign in with the provided custom token if it exists
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                    }
+                } catch (e) {
+                    console.error("Firebase initialization error:", e);
+                    showMessage("Failed to initialize the app. Please check the console for details.");
+                }
+            } else {
+                console.warn("Firebase configuration not found. Running in a limited local mode.");
+                userId = crypto.randomUUID();
+                userIdDisplay.textContent = `Local: ${userId}`;
+                renderForums();
+            }
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+
+</html>

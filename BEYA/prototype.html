@@ -4,83 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>G.MO - App Homepage</title>
+    <!-- External stylesheet for Font Awesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
+    <!-- Main stylesheet for custom styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Main container for the app's layout -->
     <div class="app-container">
         
+        <!-- Header section with logo and user icons -->
         <header class="header">
             <div class="logo">
+                <!-- G.MO logo as an SVG -->
                 <svg class="logo-svg" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.418 0-8-3.582-8-8s3.582-8 8-8 8 3.582 8 8-3.582 8-8 8zm-1-14c-1.38 0-2.5 1.12-2.5 2.5 0 .55.45 1 1 1s1-.45 1-1c0-.265.11-.518.293-.707.184-.184.437-.293.707-.293.552 0 1 .448 1 1v1.5c0 .552-.448 1-1 1s-1-.448-1-1v-1c-2.485 0-4.5 2.015-4.5 4.5s2.015 4.5 4.5 4.5c.552 0 1-.448 1-1s-.448-1-1-1c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5c.552 0 1-.448 1-1v-1.5c0-.552.448-1 1-1s1 .448 1 1v1.5c0 .552-.448 1-1 1s-1 .448-1 1v1.5c0 .552.448 1 1 1s1-.448 1-1v-1c2.485 0 4.5-2.015 4.5-4.5s-2.015-4.5-4.5-4.5c-.552 0-1 .448-1 1s.448 1 1 1z"/>
                 </svg>
                 <span>G.MO</span>
             </div>
-
             <div class="icons">
-                
-                <a href="chat.html" >
-            <button> 
-                <i class="fa-solid fa-bell">
-                </i>
-            </button>
+                <a href="chat.html" style="color: inherit;">
+                    <i class="fa-solid fa-bell"></i>
                 </a>
-                
-
                 <i class="fa-regular fa-user"></i>
             </div>
         </header>
 
+        <!-- Main content area, configured to be scrollable -->
         <main class="main-content scroll-container">
+            <!-- Greeting section for the user -->
             <section class="greeting">
-                <h1>Howdy, Bill! <span class="text-xl">👋</span></h1>
+                <h1>Howdy, Bill! <span>👋</span></h1>
             </section>
 
+            <!-- Weather information card -->
             <section class="weather-card">
                 <div class="location-info">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 1.125rem; font-weight: 600;">
+                    <div>
                         <i class="fa-solid fa-location-dot"></i>
                         <span>Petersburg</span>
                     </div>
-                    <span style="font-size: 0.875rem; font-weight: 300;">Aug 23, Tue</span>
+                    <span>Aug 23, Tue</span>
                 </div>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                <div>
                     <div class="current-temp">
                         <span>68° F</span>
-                        <i class="fa-solid fa-cloud" style="font-size: 3rem;"></i>
+                        <i class="fa-solid fa-cloud"></i>
                     </div>
                 </div>
                 <div class="details">
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <span style="font-weight: bold;">HUMIDITY</span>
-                        <span style="font-weight: 300;">98%</span>
+                    <div>
+                        <span>HUMIDITY</span>
+                        <span>98%</span>
                     </div>
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <span style="font-weight: bold;">AIR PRESSURE</span>
-                        <span style="font-weight: 300;">1005hPa</span>
+                    <div>
+                        <span>AIR PRESSURE</span>
+                        <span>1005hPa</span>
                     </div>
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <span style="font-weight: bold;">VISIBILITY</span>
-                        <span style="font-weight: 300;">8km</span>
+                    <div>
+                        <span>VISIBILITY</span>
+                        <span>8km</span>
                     </div>
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <span style="font-weight: bold;">WIND</span>
-                        <span style="font-weight: 300;">2mph</span>
+                    <div>
+                        <span>WIND</span>
+                        <span>2mph</span>
                     </div>
                 </div>
             </section>
 
+            <!-- Section header for insights -->
             <section class="insights-section">
                 <h2>Real-time Insights</h2>
-                <p style="margin-top: 0.5rem; font-size: 0.875rem; color: #6b7280;">| production</p>
+                <p>| production</p>
             </section>
 
+            <!-- Temperature insight card with a data table -->
             <section class="insight-card">
                 <h3>Temperature</h3>
-                <div style="overflow-x: auto;">
+                <div>
                     <table>
                         <thead>
                             <tr>
@@ -114,9 +116,10 @@
                 </div>
             </section>
 
+            <!-- Moisture insight card with a data table -->
             <section class="insight-card">
                 <h3>Moisture</h3>
-                <div style="overflow-x: auto;">
+                <div>
                     <table>
                         <thead>
                             <tr>
@@ -150,39 +153,41 @@
                 </div>
             </section>
 
+            <!-- General advice box -->
             <section class="advice-box">
                 <div class="title-container">
                     <i class="fa-solid fa-leaf"></i>
                     <h3>General Advice</h3>
                 </div>
-                <p style="font-size: 0.875rem;">
+                <p>
                     Monitor daily temperature trends and take preventative actions before extreme heat affects crop yield.
                 </p>
             </section>
         </main>
-        
+
+        <!-- Bottom navigation bar -->
         <nav class="bottom-nav">
-    <div class="nav-item active">
-        <i class="fa-solid fa-house"></i>
-        <span>Home</span>
+            <div class="nav-item active">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </div>
+            <div class="nav-item">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </div>
+            <a href="community.html" style="text-decoration: none; color: inherit;">
+                <div class="nav-item">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Community</span>
+                </div>
+            </a>
+            <a href="my_farm.html" style="text-decoration: none; color: inherit;">
+                <div class="nav-item">
+                    <i class="fa-solid fa-tractor"></i>
+                    <span>My Farm</span>
+                </div>
+            </a>
+        </nav>
     </div>
-    <div class="nav-item">
-        <i class="fa-solid fa-gear"></i>
-        <span>Settings</span>
-    </div>
-    <div class="nav-item">
-        <i class="fa-solid fa-users"></i>
-        <span>Community</span>
-    </div>
-    <a href="my_farm.html" style="text-decoration: none; color: inherit;">
-        <div class="nav-item">
-            <i class="fa-solid fa-tractor"></i>
-            <span>My Farm</span>
-        </div>
-    </a>
-</nav>
-        
-    </div>
-    <script src="script.js"></script>
 </body>
 </html>
